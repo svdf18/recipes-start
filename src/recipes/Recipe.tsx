@@ -1,15 +1,18 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getRecipe, Recipe as ApiRecipe } from "../services/apiFacade";
 import { useEffect, useState } from "react";
 
 export default function Recipe() {
-  //const { id } = useParams();
-  //console.log("id", id);
+  const { id } = useParams();
+  console.log("id", id);
+
+  const [queryString] = useSearchParams();
+  const initialCategory = queryString.get("category");
 
   const [recipe, setRecipe] = useState<ApiRecipe | null>(null);
-  // useEffect(() => {
-  //   getRecipe(Number(id)).then((res) => setRecipe(res));
-  // }, [id]);
+  useEffect(() => {
+    getRecipe(Number(id)).then((res) => setRecipe(res));
+  }, [id]);
 
   return (
     <>
