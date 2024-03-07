@@ -4,16 +4,23 @@
  * @param body  The request body (only relevant for POST and PUT)
  * @returns 
  */
-export function makeOptions(method: string, body: object | null): RequestInit {
+
+
+
+export function makeOptions(method: string, body: object | null, addToken?: boolean): RequestInit {
   const opts: RequestInit = {
     method: method,
     headers: {
       "Content-type": "application/json",
-      Accept: "application/json",
+      "Accept": "application/json",
     },
   };
   if (body) {
     opts.body = JSON.stringify(body);
+  }
+  if (addToken) {
+    //@ts-ignore
+    opts.headers["Authorization"] = "Bearer " + localStorage.getItem("token");
   }
   return opts;
 }

@@ -16,13 +16,19 @@ export default function NavHeader() {
           <NavLink to="/categories">Categories</NavLink> 
           {/* <NavLink to="/categories">Categories</NavLink>  */}
         </li>
+        {auth.isLoggedIn() && (
+        <li>
+          <NavLink to="/add-category">Add Category</NavLink> 
+          {/* <NavLink to="/add">Add</NavLink>  */}
+        </li>
+      )}
         <li>
           <NavLink to="/recipes">Recipes</NavLink> 
           {/* <NavLink to="/recipes">Recipes</NavLink>  */}
         </li>
       {auth.isLoggedIn() && (
         <li>
-          <NavLink to="/add">Add</NavLink> 
+          <NavLink to="/add-recipe">Add Recipe</NavLink> 
           {/* <NavLink to="/add">Add</NavLink>  */}
         </li>
       )}
