@@ -1,10 +1,11 @@
 // import { Categories } from "../recipes/Categories";
 import { API_URL } from "../settings";
 import  { makeOptions,handleHttpErrors } from "./fetchUtils";
+
 const CATEGORIES_URL = API_URL + "/categories";
 const RECIPE_URL = API_URL + "/recipes";
 const INFO_URL = API_URL + "/info";
-
+const CACHE_TIME = 1000 * 60 * 1; // 1 minutes  
 
 interface Recipe {
   id: number | null;
@@ -23,23 +24,30 @@ interface Info {
   info: string;
 }
 
-let categories: Array<string> = [];
+const categories = {
+  categoriesList: [] as Array<string>,
+  lastUpdated: 0
+};
+
+// let categories: Array<string> = [];
 let recipes: Array<Recipe> = [];
 let info: Info|null = null;
 
 async function getCategories(): Promise<Array<string>> {
-  // TEST FOR REFETCH TIMESTAMPS
-
-  // if (categories.length > 0) return [...categories];
+  if (categories.lastUpdated + CACHE_TIME > Date.now()) return [... categories.categoriesList];
   const res = await fetch(CATEGORIES_URL).then(handleHttpErrors);
-  categories = [...res];
-  return categories;
+  categories.categoriesList = [...res];
+  categories.lastUpdated = Date.now();
+  return categories.categoriesList;
 }
 
 async function addCategory(newCategory: string) {
   const options = makeOptions("POST", null, true);
-  fetch(CATEGORIES_URL+"/"+newCategory, options).then(handleHttpErrors);
-  // return fetch(CATEGORIES_URL, options).then(handleHttpErrors);
+  const res = await fetch(CATEGORIES_URL + "/" + newCategory, options).then(handleHttpErrors);
+
+  // Update the cached categories list
+  categories.categoriesList = [...res];
+  categories.lastUpdated = Date.now();
 }
 
 async function getRecipes(category: string | null): Promise<Array<Recipe>> {

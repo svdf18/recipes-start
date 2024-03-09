@@ -22,13 +22,14 @@ export default function App() {
         <Route path="/categories/" element={<Categories />} />
         <Route path="/add-category" 
           element={<RequireAuth roles={["ADMIN"]}>
-            <AddCategory /></RequireAuth>} />
+            <AddCategory />
+            </RequireAuth>} />
         <Route path="/recipes" element ={<RecipesLayout/>}>
           <Route path=":id" element={<Recipe />} />
         </Route>
         <Route path="/add-recipe" 
           element={
-          <RequireAuth roles={["USER"]}>
+          <RequireAuth roles={["USER", "ADMIN"]}>
             <RecipeForm />
           </RequireAuth>} />
         <Route path="/login" element={<Login />} />
